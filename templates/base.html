@@ -40,13 +40,13 @@
     <!-- Extra JavaScript can be added here -->
     {% endblock %}
 
-    <title>Boutique Ado {% block extratitle %}</title>
+    <title>Boutique Ado {% block extratitle %}{%endblock%}</title>
   </head>
   <body>
     <header class="container-fluid fixed-top bg-light"></header>
     {% if messages %}
     <div class="messagecontainer"></div>
-    {% endif %} {% block pageheader %} {% endblock %} {% block content %} {%
-    endblock %} {% block postjs %} {% endblock} %
+    {% endif %} {% block pageheader %} {% endblock %} {% block content %}
+    {%endblock %} {% block postjs %} {% endblock %}
   </body>
 </html>
