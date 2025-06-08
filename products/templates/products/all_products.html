@@ -6,7 +6,21 @@
     <div class="col-12 my-4 sticky-top ">
       <h1 class="logo-font text-center ">All Products</h1>
     </div>
+    {% if messages %}
+    <div class="col-12">
+      {% for message in messages %}
+      <div class="alert alert-warning alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+
   </div>
+    {% endif %}
+  
 
   <div class="row">
     {% for product in products %}
