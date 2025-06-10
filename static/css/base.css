@@ -52,6 +52,10 @@ a:focus {
     padding-top:190px !important;
 }
 
+.pb-4 {
+    padding-bottom: 1.5rem !important;
+}
+
 h5 {
     font-size: 1.25rem;
     font-weight: 300;

@@ -11,17 +11,43 @@ def all_products(request):
 
     products = Product.objects.all()
     query = None
+    categories = None
+
+
     if 'q' in request.GET:
         query = request.GET['q']
-        if not query:
+        if query:
+            queries = Q(name__icontains=query) | Q(description__icontains=query)
+            products = products.filter(queries)
+            categories = products.filter(category__name__icontains=query)
+        else:
             messages.error(request, "You didn't enter any search criteria!")
             return redirect(reverse('all_products'))
+
+       
         
-        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    
+
+    if 'category' in request.GET:
+        categories = request.GET['category'].split(',')
+        print('categories===', categories)
+        
+        if categories:
+            products = products.filter(category__name__in=categories)
+            categories = Product.objects.filter(category__name__in=categories).distinct()
+        else:
+            messages.error(request, "You didn't select any categories!")
+            return redirect(reverse('all_products'))
+        
+       
+       
+        
+        
 
     context = {
         'products': products,
-        'search_term': request.GET.get('q', ''),
+        'categories': categories,
+        'star_range': range(1, 6),  # Add this line so you can loop from 1 to 5 in your template
     }
 
     return render(request, 'products/all_products.html', context)
