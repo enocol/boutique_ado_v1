@@ -46,8 +46,8 @@ def all_products(request):
 
     context = {
         'products': products,
-        'categories': categories,
-        'star_range': range(1, 6),  # Add this line so you can loop from 1 to 5 in your template
+        # 'categories': categories,
+        # 'star_range': range(1, 6),  # Add this line so you can loop from 1 to 5 in your template
     }
 
     return render(request, 'products/all_products.html', context)

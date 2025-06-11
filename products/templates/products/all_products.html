@@ -3,65 +3,74 @@
 <div class="container-fluid pt-6 pb-4">
   <div class="overlay"></div>
   <div class="row my-5">
-    <div class="col-12 my-4 sticky-top ">
-      <h1 class="logo-font text-center ">All Products</h1>
+    <div class="col-12 my-4 sticky-top">
+      <h1 class="logo-font text-center">All Products</h1>
     </div>
     {% if messages %}
     <div class="col-12">
       {% for message in messages %}
-      <div class="alert alert-warning alert-{{ message.tags }} alert-dismissible fade show"
-        role="alert">
+      <div
+        class="alert alert-warning alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert"
+      >
         {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       {% endfor %}
-
-  </div>
+    </div>
     {% endif %}
-  
 
-  <div class="row">
-    {% for product in products %}
-    <div class="col-6 col-sm-6 col-md-4 col-lg-2 mb-4">
-      <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
-        <div class="card h-100">
-          <img
-            src="{{ product.image.url }}"
-            class="card-img-top"
-            alt="{{ product.name }}"
-          />
-          <div class="card-body p-2">
-            <h5 class="card-title">{{ product.name | truncatewords:5 }}</h5>
+    <div class="row">
+      {% for product in products %}
+      <div class="col-6 col-sm-6 col-md-4 col-lg-2 mb-4">
+        <a
+          href="{% url 'product_detail' product.id %}"
+          class="text-decoration-none"
+        >
+          <div class="card h-100">
+            <img
+              src="{{ product.image.url }}"
+              class="card-img-top"
+              alt="{{ product.name }}"
+            />
+            <div class="card-body p-2">
+              <h5 class="card-title">{{ product.name | truncatewords:5 }}</h5>
 
-            <p class="card-text">${{ product.price }}</p>
-            <p class="card-text">
-              {% if product.rating <= 4.8 %}
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-             
-              {% elif product.rating >= 4.8 %}
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-             <i class="far fa-star"></i>
-              {% endif %}
-              {{ product.rating }}
-            </p>
+              <p class="card-text">${{ product.price }}</p>
+              <p class="card-text">{{ product.category.friendly_name }}</p>
+              <p class="card-text">
+                {% if product.rating <= 4.8 %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+
+                {% elif product.rating >= 4.8 %}
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+                {% endif %} {{ product.rating }}
+              </p>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+      </div>
+      <hr />
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center">No products available at the moment.</p>
+      </div>
+      {% endfor %}
     </div>
-    <hr />
-    {% empty %}
-    <div class="col-12">
-      <p class="text-center">No products available at the moment.</p>
-    </div>
-    {% endfor %}
   </div>
-</div>
 
-{% endblock %}
+  {% endblock %}
+</div>

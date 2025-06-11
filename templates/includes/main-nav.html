@@ -32,7 +32,7 @@
       </a>
       <div class="dropdown-menu border-0" aria-labelledby="clothing-link">
         <a
-          href="{%url 'all_products' %}?category='Activewear,essential"
+          href="{%url 'all_products' %}?category='activewear,essential"
           class="dropdown-item"
           >Activewear &amp; Essentials</a
         >
@@ -92,10 +92,24 @@
         Special Offers
       </a>
       <div class="dropdown-menu border-0" aria-labelledby="specials-link">
-        <a href="" class="dropdown-item">New Arrivals</a>
-        <a href="" class="dropdown-item">Deals</a>
-        <a href="" class="dropdown-item">Clearance</a>
-        <a href="" class="dropdown-item">All Specials</a>
+        <a
+          href="{%url 'all_products'%}?category=new_arrivals"
+          class="dropdown-item"
+          >New Arrivals</a
+        >
+        <a href="{%url 'all_products'%}?category=deals" class="dropdown-item"
+          >Deals</a
+        >
+        <a
+          href="{%url 'all_products'%}?category=clearance"
+          class="dropdown-item"
+          >Clearance</a
+        >
+        <a
+          href="{%url 'all_products'%}?category=deals,clearance,new_arrivals"
+          class="dropdown-item"
+          >All Specials</a
+        >
       </div>
     </li>
   </ul>
