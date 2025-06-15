@@ -83,6 +83,12 @@ h5 {
   color: white;
 }
 
+.fw-bolder {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: "Lato", sans-serif;
+}
+
 .shop-now-button:hover,
 .shop-now-button:active,
 .shop-now-button:focus,

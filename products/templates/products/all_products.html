@@ -2,7 +2,7 @@
 
 <div class="container-fluid pt-6 pb-4">
   <div class="overlay"></div>
-  <div class="row my-4">
+  <div class="row my-5">
       <div class="col-8">
         <h1 class="text-center">All Products</h1>
       </div>
@@ -18,19 +18,23 @@
   <div class="row my-5">
     <div class="col-12 my-4 sticky-top">
       {% if categories %}
-      <div class="d-flex justify-content-center flex-wrap">
+      <div class="d-flex justify-content-center align-items-center flex-wrap">
         {% for c in categories %}
         <div class="fs-1 text text-uppercase p-3">{{ c }}</div>
 
         {% empty %}
         <div class="">No categories available</div>
         {% endfor %}
-      </div>
-      {% endif %}
 
-      <div>
+         <div>
       {{ products|length }} products found
     </div>
+      </div>
+
+     
+      {% endif %}
+
+      
     </div>
 
     {% if messages %}
@@ -69,23 +73,12 @@
           <div class="card-body p-2">
             <h5 class="card-title">{{ product.name | truncatewords:1 }}</h5>
 
-            <div class="card-text d-flex justify-content-between">
-              <div class="card-text fw-bold">${{ product.price }}</div>
+            <div class=" d-flex justify-content-between">
+              <div class="fw-bolder">${{ product.price }}</div>
               
             </div>
             <p class="card-text">
-              {% if product.rating <= 4.8 %}
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-
-              {% elif product.rating >= 4.8 %}
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-              {% endif %} {{ product.rating }}
+               {{ product.rating }}
             </p>
           </div>
         </div>
@@ -103,6 +96,7 @@
 {% endblock %}
 
 {% block postloadjs %}
+{{ block.super }}
 <script>
   document.getElementById('sort').addEventListener('change', function () {
     const value = this.value;
