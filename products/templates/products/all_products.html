@@ -2,23 +2,37 @@
 
 <div class="container-fluid pt-6 pb-4">
   <div class="overlay"></div>
+  <div class="row my-4">
+      <div class="col-8">
+        <h1 class="text-center">All Products</h1>
+      </div>
+    <div class="col-4">
+      <select name="sort" id="sort" class="form-select form-select-lg w-75 ">
+        <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Sorting by....</option>
+        <option value="price" {% if current_sort == 'price' %}selected{% endif %}>Sorting by Price</option>
+        <option value="rating" {% if current_sort == 'rating' %}selected{% endif %}>Sorting by Rating</option>
+        <option value="category" {% if current_sort == 'category' %}selected{% endif %}>Sorting by Category</option>
+      </select>
+    </div>
+  </div>
   <div class="row my-5">
     <div class="col-12 my-4 sticky-top">
-       {% if categories %}
-    <div class="col-12 d-flex justify-content-center">
-  
-     {% for c in categories %}
-      <div class=" fs-1 text text-uppercase p-3">{{ c }}</div>
-      
-      {% empty %}
-      <div class="col-12">No categories available</div>
-      {% endfor %}
+      {% if categories %}
+      <div class="d-flex justify-content-center flex-wrap">
+        {% for c in categories %}
+        <div class="fs-1 text text-uppercase p-3">{{ c }}</div>
+
+        {% empty %}
+        <div class="">No categories available</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div>
+      {{ products|length }} products found
     </div>
-    {% endif %}
     </div>
-   
-    
-    
+
     {% if messages %}
     <div class="col-12">
       {% for message in messages %}
@@ -38,53 +52,69 @@
       </div>
       {% endfor %}
     </div>
-    {% endif %}
+    
+    {% endif %} {% for product in products %}
+    
+    <div class="col-6 col-sm-6 col-md-4 col-lg-2 mb-4">
+      <a
+        href="{% url 'product_detail' product.id %}"
+        class="text-decoration-none"
+      >
+        <div class="card h-100 border-0 shadow-sm">
+          <img
+            src="{{ product.image.url }}"
+            class="card-img-top"
+            alt="{{ product.name }}"
+          />
+          <div class="card-body p-2">
+            <h5 class="card-title">{{ product.name | truncatewords:1 }}</h5>
 
-    <div class="row">
-      {% for product in products %}
-      <div class="col-6 col-sm-6 col-md-4 col-lg-2 mb-4">
-        <a
-          href="{% url 'product_detail' product.id %}"
-          class="text-decoration-none"
-        >
-          <div class="card h-100 border-0 shadow-sm">
-            <img
-              src="{{ product.image.url }}"
-              class="card-img-top"
-              alt="{{ product.name }}"
-            />
-            <div class="card-body p-2">
-              <h5 class="card-title">{{ product.name | truncatewords:1 }}</h5>
-
-              <div class="card-text d-flex justify-content-between">
-                <div class="card-text">${{ product.price }}</div>
-              <div class="card-text">{{ product.category.friendly_name }}</div>
-              </div>
-              <p class="card-text">
-                {% if product.rating <= 4.8 %}
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="far fa-star"></i>
-
-                {% elif product.rating >= 4.8 %}
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="far fa-star"></i>
-                {% endif %} {{ product.rating }}
-              </p>
+            <div class="card-text d-flex justify-content-between">
+              <div class="card-text fw-bold">${{ product.price }}</div>
+              
             </div>
+            <p class="card-text">
+              {% if product.rating <= 4.8 %}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+
+              {% elif product.rating >= 4.8 %}
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+              {% endif %} {{ product.rating }}
+            </p>
           </div>
-        </a>
-      </div>
-      <hr />
-      {% empty %}
-      <div class="col-12">
-        <p class="text-center">No products available at the moment.</p>
-      </div>
-      {% endfor %}
+        </div>
+      </a>
     </div>
+    <hr />
+    {% empty %}
+    <div class="col-12">
+      <p class="text-center">No products available at the moment.</p>
+    </div>
+    {% endfor %}
   </div>
 </div>
+
+{% endblock %}
+
+{% block postloadjs %}
+<script>
+  document.getElementById('sort').addEventListener('change', function () {
+    const value = this.value;
+    if (value) {
+      const [sort, direction] = value.split('_');
+      const params = new URLSearchParams(window.location.search);
+
+      params.set('sort', sort);
+      params.set('direction', direction);
+
+      window.location.href = window.location.pathname + '?' + params.toString();
+    }
+  });
+</script>
 {% endblock %}

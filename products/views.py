@@ -12,6 +12,7 @@ def all_products(request):
     """ A view to return all products with sorting, searching and filtering """
     products = Product.objects.all()
     query = None
+    current_sort = None
     categories = None
     sort = None
     direction = None
@@ -30,12 +31,12 @@ def all_products(request):
     # Category filtering
     if 'category' in request.GET:
         categories = request.GET.get('category').split(',')
+        
+       
         if not categories:
             messages.error(request, "You didn't select any categories!")
             return redirect(reverse('all_products'))
-       
-        if categories:
-            products = products.filter(category__name__in=categories)
+        products = products.filter(category__name__in=categories)
 
     # Sorting logic
     if 'sort' in request.GET:
@@ -44,12 +45,16 @@ def all_products(request):
         
         if sort == 'name':
             sortkey = 'name'
+            current_sort = 'name'
         elif sort == 'price':
             sortkey = 'price'
+            current_sort = 'price'
         elif sort == 'rating':
             sortkey = 'rating'
+            current_sort = 'rating'
         elif sort == 'category':
             sortkey = 'category__name'
+            current_sort = 'category'
         else:
             messages.error(request, "Invalid sort option!")
             return redirect(reverse('all_products'))
@@ -63,6 +68,7 @@ def all_products(request):
         'products': products,
         'current_sort': f'{sort}_{direction}' if sort else '',
         'categories': categories,
+        'current_sort': current_sort,
     }
 
     return render(request, 'products/all_products.html', context)
