@@ -4,8 +4,21 @@
   <div class="overlay"></div>
   <div class="row my-5">
     <div class="col-12 my-4 sticky-top">
-      <h1 class="logo-font text-center">All Products</h1>
+       {% if categories %}
+    <div class="col-12 d-flex justify-content-center">
+  
+     {% for c in categories %}
+      <div class=" fs-1 text text-uppercase p-3">{{ c }}</div>
+      
+      {% empty %}
+      <div class="col-12">No categories available</div>
+      {% endfor %}
     </div>
+    {% endif %}
+    </div>
+   
+    
+    
     {% if messages %}
     <div class="col-12">
       {% for message in messages %}
@@ -34,17 +47,19 @@
           href="{% url 'product_detail' product.id %}"
           class="text-decoration-none"
         >
-          <div class="card h-100">
+          <div class="card h-100 border-0 shadow-sm">
             <img
               src="{{ product.image.url }}"
               class="card-img-top"
               alt="{{ product.name }}"
             />
             <div class="card-body p-2">
-              <h5 class="card-title">{{ product.name | truncatewords:5 }}</h5>
+              <h5 class="card-title">{{ product.name | truncatewords:1 }}</h5>
 
-              <p class="card-text">${{ product.price }}</p>
-              <p class="card-text">{{ product.category.friendly_name }}</p>
+              <div class="card-text d-flex justify-content-between">
+                <div class="card-text">${{ product.price }}</div>
+              <div class="card-text">{{ product.category.friendly_name }}</div>
+              </div>
               <p class="card-text">
                 {% if product.rating <= 4.8 %}
                 <i class="fas fa-star"></i>
@@ -71,6 +86,5 @@
       {% endfor %}
     </div>
   </div>
-
-  {% endblock %}
 </div>
+{% endblock %}
