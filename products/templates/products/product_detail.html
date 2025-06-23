@@ -24,34 +24,99 @@
         {% endif %} {% endfor %} ({{ product.rating }})
       </p>
       <form method="post" action="{% url 'add_to_bag' product.id %}">
-        {% csrf_token %}
-        {% if product.has_sizes %}
-        
-          <label for="size">Select Size</label>
+        {% csrf_token %} {% if product.has_sizes %}
+
+        <label for="size">Select Size</label>
         <br />
 
-        <select name="size" id="{{product.id}}" class="form-control mb-2 selectpicker">
-          <option value="Small" >S</option>
+        <select
+          name="size"
+          id="{{product.id}}"
+          class="form-control mb-2 selectpicker"
+        >
+          <option value="Small">S</option>
           <option value="Medium" selected>M</option>
           <option value="Large">L</option>
           <option value="Extra Large">XL</option>
         </select>
         {% else %}
-       
+
         <input type="hidden" name="size" value="N/A" />
         {% endif %}
-        
-       
-      
+
         <label for="">Quantity</label>
         <br />
-        <input type="number" name="quantity" value="1" min="1" max="100" data-product-id="{{product.id}}" class="selectpicker mb-2" id="{{product.id}}" />
-        <input type="hidden" name="redirect_url" value="{{ request.path }}"  />
+        <div class="input-group mb-3" style="width: 150px">
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="decrease-{{ product.id }}"
+          >
+            <i class="fa-solid fa-minus"></i>
+          </button>
+
+          <input
+            type="number"
+            name="quantity"
+            value="1"
+            min="1"
+            max="10"
+            data-product-id="{{ product.id }}"
+            class="form-control text-center"
+            id="quantity-{{ product.id }}"
+          />
+
+          <button
+            class="btn btn-outline-secondary"
+            id="increase-{{ product.id }}"
+            type="button"
+          >
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+
+        <input type="hidden" name="redirect_url" value="{{ request.path }}" />
         <br />
-        <button type="submit" class="btn btn-primary" value="Add to Cart">Add to Cart</button>
+        <button type="submit" class="btn btn-primary" value="Add to Cart">
+          Add to Cart
+        </button>
       </form>
     </div>
   </div>
 </div>
+
+{% endblock %} {% block postloadjs %}
+
+<script>
+  $(document).ready(function () {
+    const incrementButton = $("#increase-{{ product.id }}");
+    const decrementButton = $("#decrease-{{ product.id }}");
+    const quantityInput = $("#quantity-{{ product.id }}");
+
+    incrementButton.on("click", function () {
+      let currentValue = parseInt(quantityInput.val());
+      let minValue = parseInt(quantityInput.attr("min"));
+      let maxValue = parseInt(quantityInput.attr("max"));
+
+      if (currentValue < maxValue) {
+        quantityInput.val(currentValue + 1);
+      } else {
+        quantityInput.val(maxValue);
+      }
+    });
+
+    decrementButton.on("click", function () {
+      let currentValue = parseInt(quantityInput.val());
+      let minValue = parseInt(quantityInput.attr("min"));
+      let maxValue = parseInt(quantityInput.attr("max"));
+
+      if (currentValue > minValue) {
+        quantityInput.val(currentValue - 1);
+      } else {
+        quantityInput.val(minValue);
+      }
+    });
+  });
+</script>
 
 {% endblock %}
