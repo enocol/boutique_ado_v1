@@ -111,8 +111,7 @@
                 class="dropdown-menu border-0"
                 aria-labelledby="user-options"
               >
-                {% if request.user.is_authenticated %} 
-                {% if request.user.is_superuser %}
+                {% if request.user.is_authenticated %} {% if request.user.is_superuser %}
                 <a href="" class="dropdown-item">Product Management</a>
                 {% endif %}
                 <a href="" class="dropdown-item">My Profile</a>
@@ -137,11 +136,28 @@
               >
                 <div class="text-center">
                   <div><i class="fas fa-shopping-bag fa-lg"></i></div>
-                  <p class="my-0">
-                    {% if total %} ${{ total|floatformat:2 }}
-                     {% else %} $0.00 {% endif %}
+                  <p class="my-0 mx-5">
+                    {% if total %}
+
+                    <button
+                      type="button"
+                      class="btn btn-primary position-relative"
+                    >
+                       ${{ grand_total|floatformat:2 }} {% else %} $0.00 {% endif %}
+                      <span
+                        class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
+                      >
+                        {% if bag_items %}
+                        {{ bag_items|length }}
+                        {% else %}
+                        0
+                        {% endif %}
+                        <span class="visually-hidden"> items</span>
+                      </span>
+                    </button>
+
+                   
                   </p>
-                  <p>{{product_count}} number of items</p>
                 </div>
               </a>
             </li>
@@ -161,7 +177,7 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          {% include 'includes/mobile-top-header.html' %} 
+          {% include 'includes/mobile-top-header.html' %}
           {% include 'includes/main-nav.html' %}
         </nav>
       </div>
@@ -176,7 +192,7 @@
 
     {% if messages %}
     <div class="message-container"></div>
-    {% endif %} {% block page_header %} {% endblock %} {% block content %}
-     {% endblock %} {% block postloadjs %} {% endblock %}
+    {% endif %} {% block page_header %} {% endblock %} {% block content %} 
+    {% endblock %} {% block postloadjs %} {% endblock %}
   </body>
 </html>

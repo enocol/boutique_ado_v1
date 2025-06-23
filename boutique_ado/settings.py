@@ -81,7 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'bag.context.bag_contents',  # Custom context processor for bag contents
+                'bag.contexts.bag_contents',  # Custom context processor for bag contents
             ],
         },
     },
@@ -175,4 +175,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Free delivery threshold setting
-FREE_DELIVERY_THRESHOLD = 60.00  # Set your desired threshold amount
+FREE_DELIVERY_THRESHOLD = 50.00  # Set your desired threshold amount

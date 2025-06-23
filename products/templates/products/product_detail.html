@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% load static %} {% block title %}{{ product.name }}
 - Product Detail{% endblock %} {% block content %}
 
-<div class="container pt-6 pb-4">
+<div class="container pt-6 pb-2">
   <div class="overlay"></div>
   <div class="row">
     <div class="col-md-6">
@@ -25,9 +25,29 @@
       </p>
       <form method="post" action="{% url 'add_to_bag' product.id %}">
         {% csrf_token %}
+        {% if product.has_sizes %}
+        
+          <label for="size">Select Size</label>
+        <br />
+
+        <select name="size" id="{{product.id}}" class="form-control mb-2 selectpicker">
+          <option value="Small" >S</option>
+          <option value="Medium" selected>M</option>
+          <option value="Large">L</option>
+          <option value="Extra Large">XL</option>
+        </select>
+        {% else %}
+       
+        <input type="hidden" name="size" value="N/A" />
+        {% endif %}
+        
+       
+      
         <label for="">Quantity</label>
-        <input type="number" name="quantity" value="1" min="1" max="100" data-product-id="{{product.id}}" id="{{product.id}}" />
-        <input type="hidden" name="redirect_url" value="{{ request.path }}" />
+        <br />
+        <input type="number" name="quantity" value="1" min="1" max="100" data-product-id="{{product.id}}" class="selectpicker mb-2" id="{{product.id}}" />
+        <input type="hidden" name="redirect_url" value="{{ request.path }}"  />
+        <br />
         <button type="submit" class="btn btn-primary" value="Add to Cart">Add to Cart</button>
       </form>
     </div>

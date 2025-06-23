@@ -43,7 +43,7 @@ a:focus {
 }
 
 .pt-6 {
-  padding-top: 190px !important;
+  padding-top: 250px !important;
 }
 
 .pb-4 {
@@ -105,6 +105,10 @@ h5 {
 
 .border-black {
   border: 1px solid black !important;
+}
+
+.selectpicker {
+  width: 20%;
 }
 
 /* -------------------------------- Media Queries */

@@ -17,15 +17,19 @@
 <body>
     <div class="container">
         <h1>Your Shopping Bag</h1>
+        <P>you are {{delivery_cost_threshold}} away from getting free delivery</P>
+      
         {% if bag_items %}
-        <div class="row justify-content-center">
-            <div class="col-6">
+        <div class="row">
+            <div class="col-md-12">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Product</th>
+                            <th>Product Info</th>
+                            <th ></th>
                             <th>Price</th>
                             <th>Quantity</th>
+                            <th>Size</th>
                             <th>Total</th>
                             <th>Actions</th>
                         </tr>
@@ -41,6 +45,8 @@
                             <td>{{ item.product.name }}</td>
                             <td>${{ item.product.price }}</td>
                             <td>{{ item.quantity }}</td>
+                            <td>{% if item.product.has_sizes%}{{ item.size }}{%else%}N/A{%endif%}</td>
+                           
                             <td>${{ item.total_price }}</td>
                             <td>
                                 <a href="{}" class="btn btn-danger">Remove</a>
@@ -51,6 +57,8 @@
                 </table>
 
                 <h3>Total: ${{ total}}</h3>
+                <h3>Delivery Cost: ${{ delivery_cost }}</h3>
+                <h3>Grand Total: ${{ grand_total }}</h3>
 
                 <a href="" class="btn btn-success">Proceed to Checkout</a>
                
