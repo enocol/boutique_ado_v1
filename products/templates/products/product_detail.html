@@ -4,6 +4,27 @@
 <div class="container pt-6 pb-2">
   <div class="overlay"></div>
   <div class="row">
+      {% if messages %}
+    <div class="col-12">
+      {% for message in messages %}
+      <div
+        class="alert alert-warning alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    
+    {% endif %}
     <div class="col-md-6">
       <a href="{{product.image.url}}" target="_blank">
         <img
@@ -48,9 +69,10 @@
         <br />
         <div class="input-group mb-3" style="width: 150px">
           <button
-            class="btn btn-outline-secondary"
+            class=" btn btn-outline-secondary"
             type="button"
-            id="decrease-{{ product.id }}"
+            id="decrement-{{ product.id }}"
+            data-product-id="{{ product.id }}"
           >
             <i class="fa-solid fa-minus"></i>
           </button>
@@ -63,13 +85,14 @@
             max="10"
             data-product-id="{{ product.id }}"
             class="form-control text-center"
-            id="quantity-{{ product.id }}"
+            id="quantity-input"
           />
 
           <button
-            class="btn btn-outline-secondary"
-            id="increase-{{ product.id }}"
+            class=" btn btn-outline-secondary"
+            id="increment-{{ product.id }}"
             type="button"
+            data-product-id="{{ product.id }}"
           >
             <i class="fa-solid fa-plus"></i>
           </button>
@@ -85,38 +108,8 @@
   </div>
 </div>
 
-{% endblock %} {% block postloadjs %}
-
-<script>
-  $(document).ready(function () {
-    const incrementButton = $("#increase-{{ product.id }}");
-    const decrementButton = $("#decrease-{{ product.id }}");
-    const quantityInput = $("#quantity-{{ product.id }}");
-
-    incrementButton.on("click", function () {
-      let currentValue = parseInt(quantityInput.val());
-      let minValue = parseInt(quantityInput.attr("min"));
-      let maxValue = parseInt(quantityInput.attr("max"));
-
-      if (currentValue < maxValue) {
-        quantityInput.val(currentValue + 1);
-      } else {
-        quantityInput.val(maxValue);
-      }
-    });
-
-    decrementButton.on("click", function () {
-      let currentValue = parseInt(quantityInput.val());
-      let minValue = parseInt(quantityInput.attr("min"));
-      let maxValue = parseInt(quantityInput.attr("max"));
-
-      if (currentValue > minValue) {
-        quantityInput.val(currentValue - 1);
-      } else {
-        quantityInput.val(minValue);
-      }
-    });
-  });
-</script>
-
 {% endblock %}
+ {% block postloadjs %}
+ {{ block.super }}
+{% include "products/includes/product-scripts.html" %}
+ {% endblock %}

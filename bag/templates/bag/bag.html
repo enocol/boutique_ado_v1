@@ -1,74 +1,143 @@
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
-    <title>Your Shopping Bag</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Your Shopping Bag</h1>
-        <P>you are {{delivery_cost_threshold}} away from getting free delivery</P>
-      
-        {% if bag_items %}
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Product Info</th>
-                            <th ></th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Size</th>
-                            <th>Total</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in bag_items %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'product_detail' item.product.id %}">
-                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px;">
-                                </a>
-                            </td>
-                            <td>{{ item.product.name }}</td>
-                            <td>${{ item.product.price }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>{% if item.product.has_sizes%}{{ item.size }}{%else%}N/A{%endif%}</td>
-                           
-                            <td>${{ item.total_price }}</td>
-                            <td>
-                                <a href="{}" class="btn btn-danger">Remove</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-                <h3>Total: ${{ total}}</h3>
-                <h3>Delivery Cost: ${{ delivery_cost }}</h3>
-                <h3>Grand Total: ${{ grand_total }}</h3>
-
-                <a href="" class="btn btn-success">Proceed to Checkout</a>
-               
-            </div>
-        </div>
+{% extends "base.html" %} {% load static %} {% block title %} Your Shopping
+Bag{%endblock %} {% block content%}
+<div class="container pt-6 pb-2">
+  <div class="overlay"></div>
+  <h1>Your Shopping Bag</h1>
+  <p>you are £{{delivery_cost_threshold}} away from getting free delivery</p>
+    {% if messages %}
+    <div class="col-12">
+      {% for message in messages %}
+      <div
+        class="alert alert-warning alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
     </div>
-    {% else %}
-        <p>Your shopping bag is empty.</p>
-        <a href="{% url 'all_products' %}" class="btn btn-primary">Continue Shopping</a>
+    
     {% endif %}
-      
-</body>
-</html>
+
+  {% if bag_items %}
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Product Info</th>
+            <th></th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in bag_items %}
+          <tr>
+            <td>
+              <a href="{% url 'product_detail' item.product.id %}">
+                <img
+                  src="{{ item.product.image.url }}"
+                  alt="{{ item.product.name }}"
+                  style="width: 50px; height: 50px"
+                />
+              </a>
+            </td>
+            <td>
+              <div>
+                <p>{{ item.product.name }}</p>
+                {% if item.product.has_sizes%}
+                <p>
+                  <span><i class="fa-solid fa-expand"></i> Size: </span>
+                  {{item.size}}
+                </p>
+                {%else%}N/A{%endif%}
+              </div>
+            </td>
+            <td>${{ item.product.price }}</td>
+            
+            <td>
+              <form method="post" action="{% url 'adjust_bag' item.product.id %}">
+                {% csrf_token %}
+
+                <div class="input-group mb-3" style="width: 150px">
+                  <button
+                    class="decrement-qty btn btn-outline-secondary"
+                    type="button"
+                    id="decrease-{{ item.product.id }}"
+                    data-product-id="{{ item.product.id }}"
+                  >
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+
+                  <input
+                    type="number"
+                    name="quantity"
+                    value="{{ item.quantity }}"
+                    min="1"
+                    max="10"
+                    data-product-id="{{ item.product.id }}"
+                    class="form-control text-center"
+                    id="quantity-{{ item.product.id }}"
+                  />
+
+                  <button
+                    class="increment-qty btn btn-outline-secondary"
+                    id="increase-{{ item.product.id }}"
+                    type="button"
+                    data-product-id="{{ item.product.id }}"
+                  >
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                  {% if item.product.has_sizes %}
+                  <input type="hidden" name="size" value="{{ item.size }}" />
+                  {% else %}
+                  <input type="hidden" name="size" value="N/A" />
+                  {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  Update Quantity
+                </button>
+                <input type="hidden" name="redirect_url" value="{{ request.path }}" />
+              </form>
+            </td>
+            <td>${{ item.line_total}}</td>
+
+            
+            <td>
+              <a href="{% url 'remove_from_bag' item.product.id %}" class="btn btn-danger">Remove</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Delivery Cost: ${{ delivery_cost }}</h3>
+      <h3>Grand Total: ${{ grand_total }}</h3>
+
+      <a href="" class="btn btn-success">Proceed to Checkout</a>
+    </div>
+  </div>
+  {% else %}
+  <p>Your shopping bag is empty.</p>
+  <a href="{% url 'all_products' %}" class="btn btn-primary"
+    >Continue Shopping</a
+  >
+  {% endif %}
+</div>
+
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+{% include "products/includes/product-scripts.html" %}
+{% endblock %}

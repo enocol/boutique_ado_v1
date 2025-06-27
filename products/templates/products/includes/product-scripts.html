@@ -1,0 +1,75 @@
+<script>
+ // Select all decrement buttons
+const decrementButtons = document.querySelectorAll('.decrement-qty');
+
+// Select all increment buttons
+const incrementButtons = document.querySelectorAll('.increment-qty');
+
+// Decrement logic
+decrementButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    const productId = this.dataset.productId;
+    const inputField = document.querySelector(`#quantity-${productId}`);
+    let currentValue = parseInt(inputField.value);
+    const minValue = parseInt(inputField.min);
+
+    if (currentValue > minValue) {
+      inputField.value = currentValue - 1;
+     
+      
+     
+    }
+  });
+});
+
+// Increment logic
+incrementButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    const productId = this.dataset.productId;
+    const inputField = document.querySelector(`#quantity-${productId}`);
+    let currentValue = parseInt(inputField.value);
+    const maxValue = parseInt(inputField.max);
+
+    if (currentValue < maxValue) {
+      inputField.value = currentValue + 1;
+     
+    }
+  });
+});
+
+// Function to submit the quantity change
+
+
+  // Select increment button in the product detail page
+  const incrementButton = document.getElementById('increment-{{ product.id }}')
+  
+    incrementButton.addEventListener('click', function() {
+      const inputField = document.getElementById("quantity-input");
+      let currentValue = parseInt(inputField.value);
+      const maxValue = parseInt(inputField.max);
+
+      if (currentValue < maxValue) {
+        inputField.value = currentValue + 1;
+        
+      }
+    });
+  
+
+  // Select all decrement buttons in the product detail page
+  const decrementButton = document.getElementById('decrement-{{ product.id }}')
+
+  // Add click event listener to each decrement button
+  
+     decrementButton.addEventListener('click', function() {
+      const inputField = document.getElementById("quantity-input");
+      let currentValue = parseInt(inputField.value);
+      const minValue = parseInt(inputField.min);
+
+      if (currentValue > minValue) {
+        inputField.value = currentValue - 1;
+        
+      }
+    })
+
+
+</script>
