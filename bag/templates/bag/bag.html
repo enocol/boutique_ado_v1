@@ -71,10 +71,10 @@ Bag{%endblock %} {% block content%}
 
                 <div class="input-group mb-3" style="width: 150px">
                   <button
-                    class="decrement-qty btn btn-outline-secondary"
+                    class="decrementing-qty btn btn-outline-secondary"
                     type="button"
                     id="decrease-{{ item.product.id }}"
-                    data-product-id="{{ item.product.id }}"
+                    data-product-id-decrementing="{{ item.product.id }}"
                   >
                     <i class="fa-solid fa-minus"></i>
                   </button>
@@ -86,15 +86,15 @@ Bag{%endblock %} {% block content%}
                     min="1"
                     max="10"
                     data-product-id="{{ item.product.id }}"
-                    class="form-control text-center"
+                    class="input-field form-control text-center"
                     id="quantity-{{ item.product.id }}"
                   />
 
                   <button
-                    class="increment-qty btn btn-outline-secondary"
+                    class="incrementing-qty btn btn-outline-secondary"
                     id="increase-{{ item.product.id }}"
                     type="button"
-                    data-product-id="{{ item.product.id }}"
+                    data-product-id-incrementing="{{ item.product.id }}"
                   >
                     <i class="fa-solid fa-plus"></i>
                   </button>
@@ -114,7 +114,7 @@ Bag{%endblock %} {% block content%}
 
             
             <td>
-              <a href="{% url 'remove_from_bag' item.product.id %}" class="btn btn-danger">Remove</a>
+              <a href="{% url 'remove_from_bag' item.product.id %}?size={{ item.size }}" class="btn btn-danger">Remove</a>
             </td>
           </tr>
           {% endfor %}
@@ -140,4 +140,41 @@ Bag{%endblock %} {% block content%}
 {% block postloadjs %}
 {{ block.super }}
 {% include "products/includes/product-scripts.html" %}
+<script>
+  // INCREMENT BUTTON HANDLER
+  const incrementButtonsBag = document.querySelectorAll('.incrementing-qty');
+
+  incrementButtonsBag.forEach(button => {
+    button.addEventListener('click', function () {
+      // Find the closest input-group (shared container for button and input)
+      const inputGroup = this.closest('.input-group');
+      const inputField = inputGroup.querySelector('.input-field');
+
+      let currentValue = parseInt(inputField.value);
+      const maxValue = parseInt(inputField.max);
+
+      if (currentValue < maxValue) {
+        inputField.value = currentValue + 1;
+      }
+    });
+  });
+
+  // DECREMENT BUTTON HANDLER
+  const decrementButtonsBag = document.querySelectorAll('.decrementing-qty');
+
+  decrementButtonsBag.forEach(button => {
+    button.addEventListener('click', function () {
+      const inputGroup = this.closest('.input-group');
+      const inputField = inputGroup.querySelector('.input-field');
+
+      let currentValue = parseInt(inputField.value);
+      const minValue = parseInt(inputField.min);
+
+      if (currentValue > minValue) {
+        inputField.value = currentValue - 1;
+      }
+    });
+  });
+</script>
+
 {% endblock %}
