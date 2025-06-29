@@ -138,12 +138,14 @@
                   <div><i class="fas fa-shopping-bag fa-lg"></i></div>
                   <p class="my-0 mx-5">
                     {% if total %}
+                    
 
                     <button
                       type="button"
                       class="btn btn-primary position-relative"
                     >
-                       ${{ grand_total|floatformat:2 }} {% else %} $0.00 {% endif %}
+                      ${{ total|floatformat:2 }}
+
                       <span
                         class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger"
                       >
@@ -152,8 +154,17 @@
                         {% else %}
                         0
                         {% endif %}
-                        <span class="visually-hidden"> items</span>
+                        <span class="visually-hidden"> item(s)</span>
                       </span>
+
+
+
+
+                        {% else %}
+                         $0.00 
+                         
+                      {% endif %}
+                    
                     </button>
 
                    

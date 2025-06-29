@@ -2,8 +2,6 @@
 Bag{%endblock %} {% block content%}
 <div class="container pt-6 pb-2">
   <div class="overlay"></div>
-  <h1>Your Shopping Bag</h1>
-  <p>you are £{{delivery_cost_threshold}} away from getting free delivery</p>
     {% if messages %}
     <div class="col-12">
       {% for message in messages %}
@@ -25,6 +23,9 @@ Bag{%endblock %} {% block content%}
     </div>
     
     {% endif %}
+  <h1>Your Shopping Bag</h1>
+  <p>you are £{{delivery_cost_threshold}} away from getting free delivery</p>
+  
 
   {% if bag_items %}
   <div class="row">
