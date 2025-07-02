@@ -111,6 +111,13 @@ h5 {
   width: 20%;
 }
 
+.message-container {
+  position: fixed;
+  top: 72px;
+  right: 15px;
+  z-index: 1050;
+}
+
 /* -------------------------------- Media Queries */
 
 /* Slightly larger container on xl screens */
