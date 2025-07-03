@@ -18,9 +18,9 @@ class Order(models.Model):
     postcode = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=40)
     date = models.DateTimeField(auto_now_add=True)
-    delivery_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    order_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    grand_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    delivery_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0, editable=False)
+    order_total = models.DecimalField(max_digits=10, decimal_places=2, default=0, editable=False)
+    grand_total = models.DecimalField(max_digits=10, decimal_places=2, default=0, editable=False)
 
     def __str__(self):
         return self.order_number
