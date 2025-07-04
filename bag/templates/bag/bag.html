@@ -105,7 +105,7 @@ Bag{%endblock %} {% block content%}
       <h3>Delivery Cost: ${{ delivery_cost }}</h3>
       <h3>Grand Total: ${{ grand_total }}</h3>
 
-      <a href="" class="btn btn-success">Proceed to Checkout</a>
+      <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
     </div>
   </div>
   {% else %}

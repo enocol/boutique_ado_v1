@@ -29,6 +29,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('products/', include('products.urls')),
     path('', include('bag.urls')),
+    path('checkout/', include('checkout.urls')),
     path('.well-known/appspecific/com.chrome.devtools.json', ignore_well_known_request), 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

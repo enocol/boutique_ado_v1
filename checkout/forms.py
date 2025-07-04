@@ -8,30 +8,31 @@ class CheckoutForm(forms.ModelForm):
         model = Order  # Replace with your Order model
         fields = [
             'full_name', 'email', 'phone_number', 'country',
-            'postcode', 'town_or_city', 'street_address1',
-            'street_address2', 'county'
+            'postcode', 'town_or_city', 'address_line_1',
+            'address_line_2', 'country'
         ]
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        placeholder = {
+        placeholders = {
             'full_name': 'Full Name',
             'email': 'Email Address',
             'phone_number': 'Phone Number',
             'country': 'Country',
             'postcode': 'Postcode',
             'town_or_city': 'Town or City',
-            'street_address1': 'Street Address 1',
-            'street_address2': 'Street Address 2 (optional)',
+            'address_line_1': 'Street Address 1',
+            'address_line_2': 'Street Address 2 (optional)',
             'county': 'County (optional)',
         }
 
         self.fields['full_name'].widget.attrs['autofocus'] = True
         for field in self.fields:
-            if field.self.fields[field].required:
-                placeholder[field] += ' *'
-            else:
-                placeholder = placeholder[field]
-            self.fields[field].widget.attrs['placeholder'] = placeholder
+            if field in placeholders:
+                placeholder_text = placeholders[field]
+                if self.fields[field].required:
+                    placeholder_text += ' *'
+                self.fields[field].widget.attrs['placeholder'] = placeholder_text
+            # Default class and hide label
             self.fields[field].widget.attrs['class'] = 'stripe-style-input'
             self.fields[field].label = False
