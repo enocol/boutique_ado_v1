@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.db.models import Sum
 from products.models import Product  # Adjust this import according to your project structure
+from decimal import Decimal
 
 
 # Create your models here.
@@ -33,7 +34,8 @@ class Order(models.Model):
         """Update the order total and grand total based on line items."""
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-            self.delivery_cost = (settings.STANDARD_DELIVERY_PERCENTAGE / 100) * self.order_total
+            
+            self.delivery_cost = (Decimal(settings.STANDARD_DELIVERY_PERCENTAGE) / Decimal('100')) * self.order_total
         elif self.order_total >= settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = 0
         else:
