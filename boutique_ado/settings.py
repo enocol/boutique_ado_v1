@@ -191,3 +191,4 @@ FREE_DELIVERY_THRESHOLD = 50.00  # Set your desired threshold amount
 STRIPE_CURRENCY = 'usd'  # Set your desired currency for Stripe payments
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+STANDARD_DELIVERY_PERCENTAGE = 10  # Standard delivery percentage

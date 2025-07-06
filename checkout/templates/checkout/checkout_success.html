@@ -17,7 +17,8 @@
         <h1>Thank you for your order!</h1>
       <p>Your order number is <strong>{{ order.order_number }}</strong>.</p>
       <p>We have emailed you a confirmation of your order on <strong>{{ order.email }}</strong>.</p>
-      {{ order }}<br>
+      <p>Your order will be shipped to the following address:</p>
+    
       {{ order.address_line_1 }}<br>
       {{ order.address_line_2 }}<br>
       {{ order.town_or_city }}<br>
@@ -25,28 +26,8 @@
       {{ order.country }}<br>
 
     </div>
-    <div class="col-md-6">
-      <h2>Order Summary</h2>
-      <p>Items in your bag: {{ bag_items|length }}</p>
-      <p>Grand Total: ${{ grand_total }}</p>
-      
-      {% if bag_items %}
-        <ul>
-          {% for item in bag_items %}
-            <li> <a href="{% url 'product_detail' item.product.id %}">
-                <img
-                  src="{{ item.product.image.url }}"
-                  alt="{{ item.product.name }}"
-                  style="width: 50px; height: 50px"
-                />
-              </a>{{ item.product.name }} - {{ item.quantity }} x ${{ item.product.price }}</li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p>Your bag is empty.</p>
-      {% endif %}
-
   </div>
+    
 </div>
 
 {% endblock %}
