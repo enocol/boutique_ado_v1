@@ -10,7 +10,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    {% endblock %} {% block extra_meta %} {% endblock %} {% block corecss %}
+    {% endblock %}
+    {% block extra_meta %} {% endblock %}
+    {% block corecss %}
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -31,7 +33,10 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-    {% endblock %} {% block extra_css %} {% endblock %} {% block corejs %}
+    {% endblock %}
+    {% block extra_css %}
+    {% endblock %}
+    {% block corejs %}
     <!-- Add your kit code -->
     <script
       src="https://kit.fontawesome.com<ADD YOUR KIT CODE HERE>.js"
@@ -54,7 +59,9 @@
     ></script>
     <!-- stripe -->
       <script src="https://js.stripe.com/basil/stripe.js"></script>
-    {% endblock %} {% block extra_js %} {% endblock %}
+    {% endblock %}
+    {% block extra_js %}
+    {% endblock %}
 
     <title>Boutique Ado {% block extra_title %}{% endblock %}</title>
   </head>
@@ -217,8 +224,10 @@
       {% endblock %}
 
    
-      {% block content %}
+    {% block content %}
     {% endblock %}
+
+
      {% block postloadjs %}
      {{ block.super }}
     <script type="text/javascript" >

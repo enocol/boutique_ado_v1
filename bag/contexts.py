@@ -48,7 +48,7 @@ def bag_contents(request):
                     'line_total': line_total
                     
                 })
-            print(bag_items)
+            
         
     if total < Free_delivery_threshold:
         delivery_cost = decimal(5.00)

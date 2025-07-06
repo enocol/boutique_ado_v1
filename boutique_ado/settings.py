@@ -20,7 +20,6 @@ if os.path.exists('env.py'):
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 ALLAUTH_DIR = os.path.join(BASE_DIR, 'templates', 'allauth')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Quick-start development settings - unsuitable for production
@@ -55,8 +54,14 @@ INSTALLED_APPS = [
     'products',
     'bag',
     'checkout',
+    "crispy_forms",
+    "crispy_bootstrap5",  # make sure this is included
 
 ]
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,6 +75,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'boutique_ado.urls'
+# Templates configuration
+
 
 TEMPLATES = [
     {
@@ -179,3 +186,8 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Free delivery threshold setting
 FREE_DELIVERY_THRESHOLD = 50.00  # Set your desired threshold amount
+
+
+STRIPE_CURRENCY = 'usd'  # Set your desired currency for Stripe payments
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
