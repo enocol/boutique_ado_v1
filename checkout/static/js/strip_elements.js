@@ -32,7 +32,7 @@ form.addEventListener('submit', function(event) {
     payment_method: {
       card: cardElement,
       billing_details: {
-        name: document.getElementById('id_name').value,
+        name: document.getElementById('id_full_name').value,
         email: document.getElementById('id_email').value
       }
     }

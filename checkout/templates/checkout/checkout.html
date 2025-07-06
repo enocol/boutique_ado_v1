@@ -29,7 +29,8 @@
           <div class="col-12 ">
               <div style="width: 100%;">{{ checkoutForm.full_name|as_crispy_field }}</div>
               <div style="width: 100%;">{{ checkoutForm.email|as_crispy_field }}</div>
-              <div style="width: 100%;">{{ checkoutForm.phone_number|as_crispy_field }}</div>
+              <div style="width: 100%;">{{ checkoutForm.town_or_city|as_crispy_field }}</div>
+              <div style="width: 100%;">{{ checkoutForm.postcode|as_crispy_field }}</div>
               <div style="width: 100%;">{{ checkoutForm.address_line_1|as_crispy_field }}</div>
               <div style="width: 100%;">{{ checkoutForm.address_line_2|as_crispy_field }}</div>
               <div style="width: 100%;">{{ checkoutForm.country|as_crispy_field }}</div>
@@ -53,7 +54,8 @@
     </div>
     <div class="col-md-4 offset-md-2">
       <h2>Order Summary</h2>
-      <p>Items in your bag: {{ bag_items|length }}</p>
+      <div class="border">
+        <p>Items in your bag: {{ bag_items|length }}</p>
       <p>Grand Total: ${{ grand_total }}</p>
       
       {% if bag_items %}
@@ -71,6 +73,7 @@
       {% else %}
         <p>Your bag is empty.</p>
       {% endif %}
+      </div>
 
   </div>
 </div>

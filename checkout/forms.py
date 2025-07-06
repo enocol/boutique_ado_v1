@@ -7,7 +7,7 @@ class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Order  # Replace with your Order model
         fields = [
-            'full_name', 'email', 'phone_number', 'country',
+            'full_name', 'email',
             'postcode', 'town_or_city', 'address_line_1',
             'address_line_2', 'country'
         ]
@@ -17,13 +17,12 @@ class CheckoutForm(forms.ModelForm):
         placeholders = {
             'full_name': 'Full Name',
             'email': 'Email Address',
-            'phone_number': 'Phone Number',
-            'country': 'Country',
             'postcode': 'Postcode',
             'town_or_city': 'Town or City',
             'address_line_1': 'Street Address 1',
             'address_line_2': 'Street Address 2 (optional)',
-            'county': 'County (optional)',
+            'country': 'Country',
+            
         }
 
         self.fields['full_name'].widget.attrs['autofocus'] = True
