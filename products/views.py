@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, reverse
 from .models import Product
 from django.shortcuts import get_object_or_404
@@ -10,6 +11,7 @@ from django.db.models.functions import Lower
 
 def all_products(request):
     """ A view to return all products with sorting, searching and filtering """
+    wh_secret = settings.STRIPE_WH_SECRET
     products = Product.objects.all()
     query = None
     current_sort = None

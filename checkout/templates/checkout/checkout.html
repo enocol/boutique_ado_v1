@@ -33,8 +33,10 @@
               <div style="width: 100%;">{{ checkoutForm.postcode|as_crispy_field }}</div>
               <div style="width: 100%;">{{ checkoutForm.address_line_1|as_crispy_field }}</div>
               <div style="width: 100%;">{{ checkoutForm.address_line_2|as_crispy_field }}</div>
-              <div style="width: 100%;">{{ checkoutForm.country|as_crispy_field }}</div>
+              <div id="countryinput">{{ checkoutForm.country|as_crispy_field }}</div>
             </div>
+            <input type="checkbox" name="save-info" id="id_save_info" class="form-control mt-3">
+            <label for="id_save_info">Save this information for next time</label>
               <div class="form-group mt-5">
                 <label for="card-element"><h1>Credit or Debit Card</h1></label>
                 <div id="card-element"></div>

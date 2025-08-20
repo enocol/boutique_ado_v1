@@ -4,6 +4,8 @@ from django.conf import settings
 from django.db.models import Sum
 from products.models import Product  # Adjust this import according to your project structure
 from decimal import Decimal
+from django_countries.fields import CountryField
+
 
 
 # Create your models here.
@@ -17,7 +19,7 @@ class Order(models.Model):
     address_line_2 = models.CharField(max_length=80, blank=True)
     town_or_city = models.CharField(max_length=40)
     postcode = models.CharField(max_length=20, blank=True)
-    country = models.CharField(max_length=40)
+    country = CountryField(blank_label='country *', default='United Kingdom')
     date = models.DateTimeField(auto_now_add=True)
     delivery_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0, editable=False)
     order_total = models.DecimalField(max_digits=10, decimal_places=2, default=0, editable=False)
@@ -34,7 +36,6 @@ class Order(models.Model):
         """Update the order total and grand total based on line items."""
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-            
             self.delivery_cost = (Decimal(settings.STANDARD_DELIVERY_PERCENTAGE) / Decimal('100')) * self.order_total
         elif self.order_total >= settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = 0

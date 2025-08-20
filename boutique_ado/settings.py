@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
+
 if os.path.exists('env.py'):
     import env  
 
@@ -31,7 +32,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -56,6 +57,8 @@ INSTALLED_APPS = [
     'checkout',
     "crispy_forms",
     "crispy_bootstrap5",  # make sure this is included
+    'django_countries',  # For country field in checkout
+    'profiles'
 
 ]
 
@@ -91,6 +94,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'bag.contexts.bag_contents',  # Custom context processor for bag contents
             ],
+           
+
         },
     },
 ]
@@ -192,3 +197,5 @@ STRIPE_CURRENCY = 'usd'  # Set your desired currency for Stripe payments
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
 STANDARD_DELIVERY_PERCENTAGE = 10  # Standard delivery percentage
+
+STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET', '')

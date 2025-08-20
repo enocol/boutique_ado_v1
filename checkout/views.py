@@ -1,11 +1,13 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render, reverse, get_object_or_404
+from django.shortcuts import redirect, render, reverse, get_object_or_404, HttpResponse
+from django.views.decorators.http import require_POST
 
 from checkout.models import Order
 from .forms import CheckoutForm
 from bag.contexts import bag_contents
 from products.models import Product
 from checkout.models import OrderLineItem
+import json
 
 from django.shortcuts import get_object_or_404
 
@@ -13,6 +15,50 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 
 import stripe
+# @require_POST
+# def cached_checkout_data(request):
+#     """ A utility function to retrieve cached checkout data """
+#     pid = request.POST.get('client_secret').split('_secret')[0]
+   
+#     stripe.api_key = settings.STRIPE_SECRET_KEY
+#     try:
+#         stripe.PaymentIntent.modify(pid, metadata={
+#             'username': request.user.username if request.user.is_authenticated else 'AnonymousUser',
+#             'bag': json.dumps(request.session.get('bag', {})),
+#             'save_info': request.session.get('save_info', False),
+#             })
+#         return HttpResponse(status=200)
+#     except Exception as e:
+#         messages.error(request, 'Your payment can not be processed now. Please try again.')
+#         return HttpResponse(content=str(e), status=400)
+    
+
+@require_POST
+def cached_checkout_data(request):
+    """A utility function to retrieve cached checkout data"""
+    try:
+        data = json.loads(request.body)  # Parse JSON from request body
+
+        client_secret = data.get('client_secret')
+        if not client_secret:
+            return HttpResponse("Missing client_secret", status=400)
+
+        pid = client_secret.split('_secret')[0]
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe.PaymentIntent.modify(pid, metadata={
+            'username': request.user.username if request.user.is_authenticated else 'AnonymousUser',
+            'bag': json.dumps(request.session.get('bag', {})),
+            'save_info': request.session.get('save_info', False),
+        })
+
+        return HttpResponse(status=200)
+
+    except Exception as e:
+        # Optionally log the exception
+        messages.error(request, 'Your payment cannot be processed right now. Please try again.')
+        # Return a response with the error message
+        return HttpResponse(content=f"Error caching checkout data: {str(e)}", status=400)
+
 
 # Create your views here.
 def checkout(request):
@@ -104,16 +150,16 @@ def checkout(request):
 
         order_form = CheckoutForm()
 
-        if not stripe_public_key:
+    if not stripe_public_key:
             messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
 
-        context = {
+    context = {
             'checkoutForm': order_form,
             'stripe_public_key': stripe_public_key,
             'client_secret': intent.client_secret,
         }
 
-        return render(request, 'checkout/checkout.html', context)
+    return render(request, 'checkout/checkout.html', context)
 
 
 

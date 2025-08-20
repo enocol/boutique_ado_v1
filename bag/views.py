@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from products.models import Product  # adjust this according to your project
+from django.contrib.sessions.exceptions import SessionInterrupted
 
 # Create your views here.
 
@@ -87,34 +88,66 @@ def adjust_bag(request, item_id):
     return redirect('bag')
 
 
-def remove_from_bag(request, item_id, size=None):
-    """Remove a specific size of an item from the shopping bag, or the whole item if no size is specified."""
-    product = get_object_or_404(Product, pk=item_id)
-    bag = request.session.get('bag', {})
-    item_id = str(item_id)
-    size = request.GET.get('size', None)  # Get size from query parameters if not provided
+# def remove_from_bag(request, item_id, size=None):
+#     """Remove a specific size of an item from the shopping bag, or the whole item if no size is specified."""
+#     product = get_object_or_404(Product, pk=item_id)
+#     bag = request.session.get('bag', {})
+#     item_id = str(item_id)
+#     size = request.GET.get('size', None)  # Get size from query parameters if not provided
 
-    if item_id in bag:
-        if size:
-            # Only remove the specific size
-            if size in bag[item_id]['items_by_size']:
-                del bag[item_id]['items_by_size'][size]
+#     if item_id in bag:
+#         if size:
+#             # Only remove the specific size
+#             if size in bag[item_id]['items_by_size']:
+#                 del bag[item_id]['items_by_size'][size]
                
 
-                # If no sizes left, remove the item completely
-                if not bag[item_id]['items_by_size']:
-                    del bag[item_id]
+#                 # If no sizes left, remove the item completely
+#                 if not bag[item_id]['items_by_size']:
+#                     del bag[item_id]
                     
-            else:
-                messages.warning(request, f"Size {size.upper()} of item {product.name} not found in your bag.")
-        else:
-            # If no size is given, remove the whole item
-            del bag[item_id]
+#             else:
+#                 messages.warning(request, f"Size {size.upper()} of item {product.name} not found in your bag.")
+#         else:
+#             # If no size is given, remove the whole item
+#             del bag[item_id]
             
-    else:
-        messages.error(request, f"Item {product.name} not found in your bag.")
+#     else:
+#         messages.error(request, f"Item {product.name} not found in your bag.")
 
-    request.session['bag'] = bag
-    return redirect('bag')  # Replace with your actual bag view name
+#     request.session['bag'] = bag
+#     return redirect('bag')  # Replace with your actual bag view name
 
 
+
+def remove_from_bag(request, item_id, size=None):
+    """Remove a specific size of an item from the shopping bag, or the whole item if no size is specified."""
+    try:
+        product = get_object_or_404(Product, pk=item_id)
+        bag = request.session.get('bag', {})
+        item_id = str(item_id)
+        size = request.GET.get('size', None)
+
+        if item_id in bag:
+            if size:
+                if size in bag[item_id]['items_by_size']:
+                    del bag[item_id]['items_by_size'][size]
+
+                    if not bag[item_id]['items_by_size']:
+                        del bag[item_id]
+                    
+                    messages.success(request, f"Removed size {size.upper()} of {product.name} from your bag.")
+                else:
+                    messages.warning(request, f"Size {size.upper()} of {product.name} not found in your bag.")
+            else:
+                del bag[item_id]
+                messages.success(request, f"Removed {product.name} from your bag.")
+        else:
+            messages.error(request, f"{product.name} is not in your bag.")
+
+        request.session['bag'] = bag
+        return redirect('bag')
+
+    except SessionInterrupted:
+        messages.error(request, "Your session was interrupted or expired. Please try again.")
+        return redirect('product_list')  # Or another fallback page
